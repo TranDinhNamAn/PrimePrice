@@ -3,7 +3,7 @@ import 'package:android/model/Cart.dart';
 import 'package:android/model/Product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+//Tran Dinh Nam An
 class CartItemsSample extends StatefulWidget {
   VoidCallback totalPrice;
 
@@ -34,6 +34,7 @@ class CartItemsSampleState extends State<CartItemsSample> {
 
   @override
   Widget build(BuildContext context) {
+    //Lấy danh sách sản phẩm đã thêm vào giỏ hàng
     List<Cart> listCart = CartData.cartList;
     return Column(
       children: [

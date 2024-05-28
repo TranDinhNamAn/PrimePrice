@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 class CartPage extends StatefulWidget {
   State<CartPage> createState() => CartPageState();
 }
-
+//Tran Dinh Nam An
 class CartPageState extends State<CartPage> {
   Future insertOrder() async {
     CartData cart = CartData();
@@ -155,7 +155,9 @@ class CartPageState extends State<CartPage> {
       ),
       bottomNavigationBar: CartBottomNavBar(
           onPressed: () async {
+            //Thêm sản phẩm trong giỏ vào đơn hàng
             await insertOrder();
+            //Xóa tất cả sản phẩm khỏi giỏ hàng
             await removeAll();
           },
           totalPrice: total),

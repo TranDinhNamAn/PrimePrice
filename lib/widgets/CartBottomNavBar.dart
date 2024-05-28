@@ -6,7 +6,7 @@ import 'package:android/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-
+//Tran Dinh Nam An
 class CartBottomNavBar extends StatefulWidget {
   final VoidCallback onPressed;
   final int totalPrice;
@@ -153,7 +153,6 @@ class CartBottomNavBarState extends State<CartBottomNavBar> {
                   ),
                 ),
               ),
-
             ),
           ],
         ),
