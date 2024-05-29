@@ -35,19 +35,27 @@ class ProductPageState extends State<ProductPage> {
     getProduct();
     foundItem = list;
   }
+  // Tim kiem san pham theo tu khoa
+  // Thêm biến trạng thái để hiển thị thông báo khi không tìm thấy sản phẩm nào
+  bool noResultsFound = false;
 
   void search(String keyword) {
     setState(() {
       if (keyword.isEmpty) {
-        // Nếu từ khóa tìm kiếm rỗng, hiển thị toàn bộ danh sách sản phẩm
-        foundItem = list;
+        foundItem = list; // Hiển thị toàn bộ sản phẩm nếu từ khóa rỗng
+        noResultsFound = false;
       } else {
-        // Nếu có từ khóa tìm kiếm, lọc danh sách sản phẩm dựa trên từ khóa đó
         foundItem = list.where((product) {
           return product.productname
               .toLowerCase()
-              .contains(keyword.toLowerCase());
+              .contains(keyword.toLowerCase()); // Lọc sản phẩm theo từ khóa
         }).toList();
+
+        if (foundItem.isEmpty) {
+          noResultsFound = true; // Hiển thị thông báo nếu không tìm thấy sản phẩm nào
+        } else {
+          noResultsFound = false;
+        }
       }
     });
   }
@@ -96,7 +104,7 @@ class ProductPageState extends State<ProductPage> {
                         child: TextFormField(
                           onChanged: (value) {
                             print('typing');
-                            search(value);
+                            search(value); // Gọi tìm kiếm khi nhập từ khóa
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -113,6 +121,18 @@ class ProductPageState extends State<ProductPage> {
                     ],
                   ),
                 ),
+                noResultsFound
+                    ? Container(
+                  margin: EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    "Không tìm thấy sản phẩm phù hợp",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.red,
+                    ),
+                  ),
+                )
+                    : Container(),
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.symmetric(
@@ -128,8 +148,8 @@ class ProductPageState extends State<ProductPage> {
                     ),
                   ),
                 ),
-                CategoriesWidget(),
-                ItemsWidget(products: foundItem),
+                CategoriesWidget(), // Hiển thị danh sách danh mục sản phẩm
+                ItemsWidget(products: foundItem), // Hiển thị danh sách sản phẩm tìm thấy
               ],
             ),
           ),
