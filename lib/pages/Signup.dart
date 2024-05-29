@@ -14,6 +14,7 @@ class SignupFrom extends StatefulWidget {
 class _SignupFromState extends State<SignupFrom> {
   final _formKey = GlobalKey<FormState>(); // Key để xác định form và quản lý trạng thái của nó
 
+//Nguyen Thanh Tu
   // Các TextEditingController để kiểm soát các trường nhập liệu
   final _conUserName = TextEditingController();
   final _conEmail = TextEditingController();

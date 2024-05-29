@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/User.dart';
 
 class UserManager {
+
+  //Nguyen Thanh Tu
   static String _keyUser = 'user';
 
   static Future<void> saveUser(UserModel user) async {

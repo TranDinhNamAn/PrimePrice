@@ -1,32 +1,35 @@
-import 'dart:convert';
-import 'package:android/constan/constan.dart';
-import 'package:android/model/Product.dart';
-import 'package:android/widgets/SideNavBar.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../widgets/CategoriesWidget.dart';
-import '../widgets/HomeAppBar.dart';
-import '../widgets/ItemsWidget.dart';
+import 'dart:convert'; // Thư viện để mã hóa và giải mã JSON
+import 'package:android/constan/constan.dart'; // Import hằng số (constants)
+import 'package:android/model/Product.dart'; // Import mô hình Product
+import 'package:android/widgets/SideNavBar.dart'; // Import widget SideNavBar
+import 'package:flutter/cupertino.dart'; // Import thư viện Flutter Cupertino
+import 'package:flutter/material.dart'; // Import thư viện Flutter Material
+import 'package:http/http.dart' as http; // Import thư viện HTTP
+import '../widgets/CategoriesWidget.dart'; // Import widget CategoriesWidget
+import '../widgets/HomeAppBar.dart'; // Import widget HomeAppBar
+import '../widgets/ItemsWidget.dart'; // Import widget ItemsWidget
 
 class HomePage extends StatefulWidget {
-  State<HomePage> createState() => HomePageState();
+  @override
+  State<HomePage> createState() => HomePageState(); // Tạo trạng thái cho HomePage
 }
 
 class HomePageState extends State<HomePage> {
-  List<Product> list = [];
-  List<Product> foundItem = [];
+  List<Product> list = []; // Danh sách toàn bộ sản phẩm
+  List<Product> foundItem = []; // Danh sách sản phẩm được tìm thấy
 
+//Nguyen Thanh Tu
+  // Phương thức lấy dữ liệu sản phẩm từ server
   Future getProduct() async {
-    var res = await http.get(Uri.parse(serverUrl + "getloaisp.php"));
-    print(res.body);
-    if (res.statusCode == 200) {
-      Iterable l = json.decode(res.body);
+    var res = await http.get(Uri.parse(serverUrl + "getloaisp.php")); // Gửi yêu cầu HTTP GET
+    print(res.body); // In kết quả phản hồi ra console
+    if (res.statusCode == 200) { // Kiểm tra nếu phản hồi thành công
+      Iterable l = json.decode(res.body); // Giải mã JSON
       List<Product> posts =
           List<Product>.from(l.map((model) => Product.fromJson(model)))
-              .toList();
+              .toList(); // Chuyển đổi JSON thành danh sách Product
       setState(() {
-        list.addAll(posts);
+        list.addAll(posts); // Cập nhật danh sách sản phẩm
       });
     }
   }
@@ -34,10 +37,11 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getProduct();
-    foundItem = list;
+    getProduct(); // Gọi phương thức lấy dữ liệu khi khởi tạo
+    foundItem = list; // Khởi tạo danh sách sản phẩm được tìm thấy
   }
 
+  // Phương thức tìm kiếm sản phẩm
   void search(String keyword) {
     setState(() {
       if (keyword.isEmpty) {
@@ -48,7 +52,7 @@ class HomePageState extends State<HomePage> {
         foundItem = list.where((product) {
           return product.productname
               .toLowerCase()
-              .contains(keyword.toLowerCase());
+              .contains(keyword.toLowerCase()); // Kiểm tra từ khóa có trong tên sản phẩm
         }).toList();
       }
     });
@@ -59,10 +63,10 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: HomeAppBar(),
+        title: HomeAppBar(), // Widget HomeAppBar
         titleSpacing: -5,
       ),
-      drawer: SideNavBar(),
+      drawer: SideNavBar(), // Widget SideNavBar
       body: ListView(
         children: [
           Container(
@@ -75,6 +79,7 @@ class HomePageState extends State<HomePage> {
             ),
             child: Column(
               children: [
+                // Thanh tìm kiếm
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
                   padding: EdgeInsets.symmetric(horizontal: 15),
@@ -91,12 +96,12 @@ class HomePageState extends State<HomePage> {
                         width: 250,
                         child: TextFormField(
                           onChanged: (value) {
-                            print('typing');
-                            search(value);
+                            print('typing'); // In ra khi đang nhập
+                            search(value); // Gọi phương thức tìm kiếm
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Nhập tên sản phẩm cần tìm...",
+                            hintText: "Nhập tên sản phẩm cần tìm...", // Gợi ý tìm kiếm
                           ),
                         ),
                       ),
@@ -109,13 +114,13 @@ class HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                // Tiêu đề "Categories"
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.symmetric(
                     vertical: 20,
                     horizontal: 10,
                   ),
-                  //search
                   child: Text(
                     "Categories",
                     style: TextStyle(
@@ -125,7 +130,8 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                CategoriesWidget(),
+                CategoriesWidget(), // Widget CategoriesWidget
+                // Tiêu đề "Best Selling"
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -138,7 +144,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                ItemsWidget(products: foundItem),
+                ItemsWidget(products: foundItem), // Widget ItemsWidget hiển thị sản phẩm tìm thấy
               ],
             ),
           ),
