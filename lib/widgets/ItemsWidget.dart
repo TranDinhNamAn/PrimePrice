@@ -5,31 +5,39 @@ import 'package:android/pages/ItemPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+//Nguyen Pham Quoc Tri
 class ItemsWidget extends StatefulWidget {
+  // Tạo trạng thái mới cho ItemsWidget
   State<ItemsWidget> createState() => ItemsWidgetState();
   List<Product> products = [];
+
+  // Constructor nhận vào một danh sách Product
   ItemsWidget({required this.products});
 }
 
 class ItemsWidgetState extends State<ItemsWidget> {
+  // Điều khiển cuộn cho GridView
   final ScrollController scrollController = ScrollController();
   List<Product> list = [];
 
+  // Hàm lấy danh sách sản phẩm từ server
   Future getProduct() async {
     var res = await http.get(Uri.parse(serverUrl + "getloaisp.php"));
     if (res.statusCode == 200) {
+      // Nếu phản hồi thành công, chuyển đổi JSON thành danh sách Product
       Iterable l = json.decode(res.body);
-      List<Product> posts =
-          List<Product>.from(l.map((model) => Product.fromJson(model)))
-              .toList();
+      List<Product> posts = List<Product>.from(
+        l.map((model) => Product.fromJson(model)),
+      ).toList();
       setState(() {
-        list.addAll(posts);
+        list.addAll(posts); // Cập nhật danh sách sản phẩm
       });
     }
   }
 
+  // Hàm lắng nghe sự kiện cuộn
   void _scrollListener() {
+    // Kiểm tra nếu đã cuộn đến cuối danh sách thì lấy thêm sản phẩm
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
       getProduct();
@@ -40,7 +48,7 @@ class ItemsWidgetState extends State<ItemsWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // Gọi hàm lấy danh sách sản phẩm khi khởi tạo widget
     super.initState();
     scrollController.addListener(_scrollListener);
     getProduct();
@@ -51,10 +59,11 @@ class ItemsWidgetState extends State<ItemsWidget> {
     return GridView.count(
       controller: scrollController,
       childAspectRatio: 0.68,
-      physics: NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(), // Ngăn việc cuộn bên trong GridView
       crossAxisCount: 2,
       shrinkWrap: true,
       children: [
+        // Hiển thị danh sách sản phẩm
         for (int i = 0; i < widget.products.length; i++)
           Container(
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -81,6 +90,7 @@ class ItemsWidgetState extends State<ItemsWidget> {
                     ),
                   ],
                 ),
+                // Icon của Product
                 InkWell(
                   onTap: () {
                     Navigator.push(
@@ -124,6 +134,7 @@ class ItemsWidgetState extends State<ItemsWidget> {
                           color: Color(0xFF4C53A5),
                         ),
                       ),
+                      // Nút thêm vào giỏ hàng
                       InkWell(
                         onTap: () {
                           CartData.addProduct1(widget.products[i]);

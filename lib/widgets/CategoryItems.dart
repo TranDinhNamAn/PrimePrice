@@ -6,25 +6,30 @@ import 'package:android/pages/ItemPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+//Nguyen Pham Quoc Tri
 class CategoryItems extends StatefulWidget {
+  // Tạo trạng thái mới cho CategoryItems
   State<CategoryItems> createState() => CategoryItemsState();
   final Category category;
+
+  // Constructor nhận vào một đối tượng Category
   CategoryItems({required this.category});
   List<Product> list = [];
 }
 
 class CategoryItemsState extends State<CategoryItems> {
+  // Hàm lấy danh sách sản phẩm từ server
   Future getProduct() async {
-    var res =
-        await http.get(Uri.parse(serverUrl+"getloaisp.php"));
+    var res = await http.get(Uri.parse(serverUrl + "getloaisp.php"));
     print(res.body);
     if (res.statusCode == 200) {
+      // Nếu phản hồi thành công, chuyển đổi JSON thành danh sách Product
       Iterable l = json.decode(res.body);
-      List<Product> posts =
-          List<Product>.from(l.map((model) => Product.fromJson(model)))
-              .toList();
+      List<Product> posts = List<Product>.from(
+        l.map((model) => Product.fromJson(model)),
+      ).toList();
       setState(() {
+        // Lọc các sản phẩm thuộc Category hiện tại
         for (int i = 0; i < posts.length; i++) {
           if (posts[i].categoryID == widget.category.categoryID) {
             widget.list.add(posts[i]);
@@ -36,7 +41,7 @@ class CategoryItemsState extends State<CategoryItems> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // Gọi hàm lấy danh sách sản phẩm khi khởi tạo widget
     super.initState();
     getProduct();
   }
@@ -45,10 +50,11 @@ class CategoryItemsState extends State<CategoryItems> {
   Widget build(BuildContext context) {
     return GridView.count(
       childAspectRatio: 0.68,
-      physics: NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(), // Ngăn việc cuộn bên trong GridView
       crossAxisCount: 2,
       shrinkWrap: true,
       children: [
+        // Hiển thị danh sách sản phẩm
         for (int i = 0; i < widget.list.length; i++)
           Container(
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -75,6 +81,7 @@ class CategoryItemsState extends State<CategoryItems> {
                     ),
                   ],
                 ),
+                // Icon của Product
                 InkWell(
                   onTap: () {
                     Navigator.push(
@@ -118,21 +125,10 @@ class CategoryItemsState extends State<CategoryItems> {
                           color: Color(0xFF4C53A5),
                         ),
                       ),
+                      // Nút thêm vào giỏ hàng
                       InkWell(
                         onTap: () {
-                          CartData.addProduct1(widget.list[i]);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              duration: const Duration(seconds: 1),
-                              content: Text(
-                                'Đã thêm sản phẩm vào giỏ',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );
+                          CartData.addProduct(widget.list[i]);
                         },
                         child: Icon(
                           Icons.shopping_cart_checkout,
@@ -149,3 +145,4 @@ class CategoryItemsState extends State<CategoryItems> {
     );
   }
 }
+

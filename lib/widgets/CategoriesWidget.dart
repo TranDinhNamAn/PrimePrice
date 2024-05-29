@@ -5,29 +5,34 @@ import 'package:android/model/Category.dart';
 import 'package:android/pages/CategoryPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+//Nguyen Pham Quoc Tri 
 class CategoriesWidget extends StatefulWidget {
+  // Tạo trạng thái mới cho CategoriesWidget
   State<CategoriesWidget> createState() => CategoriesWidgetState();
 }
+
 class CategoriesWidgetState extends State<CategoriesWidget> {
+  // Danh sách các đối tượng Category
   List<Category> list = [];
 
   @override
   void initState() {
     super.initState();
-    getCategory();
+    getCategory(); // Gọi hàm lấy danh sách Category khi khởi tạo widget
   }
+
+  // Hàm lấy danh sách Category từ server
   Future getCategory() async {
-    var res = await http
-        .get(Uri.parse(serverUrl+"getcategory.php"));
+    var res = await http.get(Uri.parse(serverUrl + "getcategory.php"));
     print(res.body);
     if (res.statusCode == 200) {
+      // Nếu phản hồi thành công, chuyển đổi JSON thành danh sách Category
       Iterable l = json.decode(res.body);
-      List<Category> posts =
-          List<Category>.from(l.map((model) => Category.fromJson(model)))
-              .toList();
+      List<Category> posts = List<Category>.from(
+        l.map((model) => Category.fromJson(model)),
+      ).toList();
       setState(() {
-        list.addAll(posts);
+        list.addAll(posts); // Cập nhật danh sách Category
         print(list);
       });
     }
@@ -36,9 +41,10 @@ class CategoriesWidgetState extends State<CategoriesWidget> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.horizontal, // Cuộn ngang
       child: Row(
         children: [
+          // Hiển thị danh sách Category
           for (int i = 0; i < list.length; i++)
             Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
@@ -50,6 +56,7 @@ class CategoriesWidgetState extends State<CategoriesWidget> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // Icon của Category
                   InkWell(
                     onTap: () {
                       Navigator.push(
@@ -68,6 +75,7 @@ class CategoriesWidgetState extends State<CategoriesWidget> {
                       ),
                     ),
                   ),
+                  // Tên của Category
                   Text(
                     "${list[i].name}",
                     style: TextStyle(
@@ -79,8 +87,10 @@ class CategoriesWidgetState extends State<CategoriesWidget> {
                 ],
               ),
             ),
+        
         ],
       ),
     );
+  
   }
 }

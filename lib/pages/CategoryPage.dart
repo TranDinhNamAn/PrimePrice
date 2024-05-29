@@ -4,8 +4,9 @@ import 'package:android/widgets/CategoriesWidget.dart';
 import 'package:android/widgets/CategoryItems.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+//Nguyen Pham Quoc Tri
 class CategoryPage extends StatelessWidget {
+  // Constructor nhận vào một đối tượng Category
   CategoryPage(this.category);
 
   final Category category;
@@ -20,6 +21,7 @@ class CategoryPage extends StatelessWidget {
             color: Color(0xFF4C53A5),
             size: 30,
           ),
+          // Quay lại trang trước khi bấm nút back
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -34,18 +36,16 @@ class CategoryPage extends StatelessWidget {
       body: ListView(
         children: [
           Container(
-            // height: 500,
             padding: EdgeInsets.only(top: 15),
             decoration: BoxDecoration(
               color: Color(0xFFEDECF2),
               borderRadius: BorderRadius.all(
                 Radius.circular(35),
-                // topLeft: Radius.circular(35),
-                // topRight: Radius.circular(35),
               ),
             ),
             child: Column(
               children: [
+                // Hiển thị các sản phẩm thuộc Category
                 CategoryItems(category: category),
               ],
             ),
@@ -55,3 +55,4 @@ class CategoryPage extends StatelessWidget {
     );
   }
 }
+

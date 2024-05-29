@@ -4,10 +4,12 @@ import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
+//Nguyen Pham Quoc Tri
 class ItemPage extends StatelessWidget {
+  // Constructor nhận vào một đối tượng Product
   ItemPage(this.product);
   final Product product;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,6 +156,7 @@ class ItemPage extends StatelessWidget {
           ),
         ],
       ),
+      // Thanh điều hướng dưới cùng
       bottomNavigationBar: ItemBottomNavBar(product),
     );
   }

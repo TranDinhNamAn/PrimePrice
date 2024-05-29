@@ -1,12 +1,10 @@
-// TODO Implement this library.import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:android/constan/constan.dart';
-import 'package:toast/toast.dart';
-
-import '../constan/getTextFormField.dart';
-import 'package:http/http.dart' as http;
-import 'Login.dart';
+import 'package:flutter/material.dart'; // Thư viện cung cấp các widget cơ bản của Flutter
+import 'package:android/constan/constan.dart'; // Tập tin chứa các hằng số tùy chỉnh
+import 'package:toast/toast.dart'; // Thư viện hiển thị thông báo dạng toast
+import '../constan/getTextFormField.dart'; // Widget tùy chỉnh để lấy trường nhập liệu
+import 'package:http/http.dart' as http; // Thư viện để gửi yêu cầu HTTP
+import 'Login.dart'; // Màn hình đăng nhập
 
 class SignupFrom extends StatefulWidget {
   @override
@@ -14,14 +12,16 @@ class SignupFrom extends StatefulWidget {
 }
 
 class _SignupFromState extends State<SignupFrom> {
-  final _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>(); // Key để xác định form và quản lý trạng thái của nó
 
+  // Các TextEditingController để kiểm soát các trường nhập liệu
   final _conUserName = TextEditingController();
   final _conEmail = TextEditingController();
   final _conPassword = TextEditingController();
   final _conCPassword = TextEditingController();
   final _conAddress = TextEditingController();
 
+  // Phương thức đăng ký người dùng
   void signup() async {
     String username = _conUserName.text;
     String password = _conPassword.text;
@@ -29,41 +29,45 @@ class _SignupFromState extends State<SignupFrom> {
     String address = _conAddress.text;
     String CPassword = _conCPassword.text;
 
-    if (_formKey.currentState!.validate()) {
-      if (password != CPassword) {
-        alerDialog(context, "Password Mismatch");
+    if (_formKey.currentState!.validate()) { // Kiểm tra xem form có hợp lệ không
+      if (password != CPassword) { // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp nhau không
+        alerDialog(context, "Password Mismatch"); // Hiển thị thông báo lỗi nếu mật khẩu không khớp
       } else {
-        _formKey.currentState?.save();
-        var url = serverUrl + "insertUser.php";
-        var res = await http.post(Uri.parse(url), body: {
-          "username": username.toString(),
-          "password": password.toString(),
-          "email": email.toString(),
-          "address": address.toString(),
+        _formKey.currentState?.save(); // Lưu trạng thái form
+        var url = serverUrl + "insertUser.php"; // URL của API để đăng ký người dùng
+        var res = await http.post(Uri.parse(url), body: { // Gửi yêu cầu POST tới server
+          "username": username,
+          "password": password,
+          "email": email,
+          "address": address,
         });
-        alerDialog(context, "Signup Successfully!");
-        Navigator.pushNamed(context, "/");
+
+        if (res.statusCode == 200) { // Kiểm tra phản hồi từ server
+          alerDialog(context, "Signup Successfully!"); // Hiển thị thông báo thành công
+          Navigator.pushNamed(context, "/"); // Điều hướng người dùng tới trang chủ
+        } else {
+          alerDialog(context, "Signup Failed. Please try again."); // Hiển thị thông báo lỗi nếu đăng ký thất bại
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    ToastContext().init(context);
+    ToastContext().init(context); // Khởi tạo Toast context
     return Scaffold(
-      appBar: AppBar(title: Text('Login or signup')),
+      appBar: AppBar(title: Text('Sign Up')), // Thanh AppBar với tiêu đề
       body: Form(
-        key: _formKey,
+        key: _formKey, // Đặt key cho form
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+          scrollDirection: Axis.vertical, // Cho phép cuộn dọc
           child: Container(
+            padding: EdgeInsets.all(16.0), // Padding cho Container
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center, // Canh giữa các phần tử
                 children: [
-                  SizedBox(
-                    height: 50.0,
-                  ),
+                  SizedBox(height: 50.0), // Khoảng cách giữa các phần tử
                   Text(
                     'SignUp',
                     style: TextStyle(
@@ -71,19 +75,15 @@ class _SignupFromState extends State<SignupFrom> {
                         color: Colors.black,
                         fontSize: 40),
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
+                  SizedBox(height: 10.0),
                   Image.asset(
                     "images/4.jpg",
                     height: 150,
                     width: 150,
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
+                  SizedBox(height: 10.0),
                   Text(
-                    'PrimePrice',
+                    'Online Shop',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black38,
@@ -92,76 +92,66 @@ class _SignupFromState extends State<SignupFrom> {
                   getTextFormField(
                       controller: _conUserName,
                       iconData: Icons.person,
-                      hintName: 'User Name'),
-                  SizedBox(
-                    height: 10,
-                  ),
+                      hintName: 'User Name'), // Trường nhập liệu cho tên người dùng
+                  SizedBox(height: 10),
                   getTextFormField(
                       controller: _conPassword,
                       iconData: Icons.lock,
-                      inputType: TextInputType.name,
+                      inputType: TextInputType.text,
                       hintName: 'Password',
-                      isobscureText: true,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                      isobscureText: true), // Trường nhập liệu cho mật khẩu
+                  SizedBox(height: 10),
                   getTextFormField(
                     controller: _conCPassword,
                     iconData: Icons.lock,
                     hintName: 'Confirm Password',
-                    isobscureText: true,
+                    isobscureText: true, // Trường nhập liệu cho xác nhận mật khẩu
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   getTextFormField(
                       controller: _conEmail,
                       iconData: Icons.email,
                       inputType: TextInputType.emailAddress,
-                      hintName: 'Email'),
-                  SizedBox(
-                    height: 10,
-                  ),
+                      hintName: 'Email'), // Trường nhập liệu cho email
+                  SizedBox(height: 10),
                   getTextFormField(
                     controller: _conAddress,
                     iconData: CupertinoIcons.location_solid,
                     hintName: 'Address',
+                    inputType: TextInputType.text, // Trường nhập liệu cho địa chỉ
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   Container(
-                    margin: EdgeInsets.all(30),
-                    width: double.infinity,
+                    margin: EdgeInsets.all(30), // Khoảng cách ngoài của Container
+                    width: double.infinity, // Chiều rộng toàn phần
                     child: TextButton(
-                      onPressed: signup,
+                      onPressed: signup, // Gọi phương thức signup khi nhấn nút
                       child: Text(
                         'Sign Up',
                         style: TextStyle(color: Colors.white),
                       ),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(30),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue, // Màu nền của nút
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30), // Bo tròn góc
+                        ),
+                      ),
                     ),
                   ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Does have account ?'),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (_) => LoginForm()),
-                                (Route<dynamic> route) => false);
-                          },
-                          child: Text('Sign In'),
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center, // Canh giữa các phần tử trong hàng
+                    children: [
+                      Text('Already have an account?'),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (_) => LoginForm()), // Điều hướng đến màn hình đăng nhập
+                              (Route<dynamic> route) => false);
+                        },
+                        child: Text('Sign In'),
+                      ),
+                    ],
                   ),
                 ],
               ),

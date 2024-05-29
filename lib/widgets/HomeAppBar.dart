@@ -31,6 +31,8 @@ class HomeAppBar extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
+                //Tran Dinh Nam An
+                //Chuyển đến trang giỏ hàng
                 Navigator.pushNamed(context, "cartPage");
               },
               child: Icon(
