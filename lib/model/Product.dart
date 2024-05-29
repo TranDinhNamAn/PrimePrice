@@ -1,5 +1,7 @@
+// Author Ngo Cu Van
 import 'dart:core';
 
+// Lớp Product đại diện cho một sản phẩm
 class Product {
   int productID;
   String productname;
@@ -9,6 +11,7 @@ class Product {
   int quantity;
   int categoryID;
 
+  // Constructor để khởi tạo đối tượng Product
   Product({
     required this.productID,
     required this.productname,
@@ -19,6 +22,7 @@ class Product {
     required this.categoryID,
   });
 
+  // Tạo đối tượng Product từ dữ liệu JSON
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       productID: int.parse(json['productID']),
@@ -30,6 +34,8 @@ class Product {
       categoryID: int.parse(json['categoryID']),
     );
   }
+
+  // Chuyển đổi đối tượng Product thành JSON
   Map<String, dynamic> toJson() => {
     'productID': productID.toString(),
     'productname': productname,
